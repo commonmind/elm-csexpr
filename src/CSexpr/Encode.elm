@@ -1,4 +1,4 @@
-module CSexpr.Encode exposing (Encoder, b, encode, list, s)
+module CSexpr.Encode exposing (Encoder, encodeBytes, encodeString, list, s)
 
 -- Copyright (C) 2019 CommonMind LLC
 --
@@ -16,6 +16,7 @@ module CSexpr.Encode exposing (Encoder, b, encode, list, s)
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Bytes exposing (Bytes)
+import Bytes.Decode as D
 import Bytes.Encode as E
 
 
@@ -23,8 +24,27 @@ type Encoder
     = Encoder E.Encoder
 
 
-encode : Encoder -> Bytes
-encode (Encoder e) =
+encodeString : Encoder -> String
+encodeString e =
+    let
+        bytes =
+            encodeBytes e
+
+        len =
+            Bytes.width bytes
+    in
+    case D.decode (D.string len) bytes of
+        Just str ->
+            str
+
+        Nothing ->
+            -- This is impossible; the exposed API can't generate
+            -- illegal strings.
+            encodeString e
+
+
+encodeBytes : Encoder -> Bytes
+encodeBytes (Encoder e) =
     E.encode e
 
 
@@ -35,16 +55,6 @@ s str =
             [ E.string <| String.fromInt <| E.getStringWidth str
             , E.string ":"
             , E.string str
-            ]
-
-
-b : Bytes -> Encoder
-b bytes =
-    Encoder <|
-        E.sequence
-            [ E.string <| String.fromInt <| Bytes.width bytes
-            , E.string ":"
-            , E.bytes bytes
             ]
 
 
