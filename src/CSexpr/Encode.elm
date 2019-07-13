@@ -1,4 +1,24 @@
-module CSexpr.Encode exposing (Encoder, encodeBytes, encodeString, list, s)
+module CSexpr.Encode exposing
+    ( Encoder
+    , encodeString
+    , s, list
+    )
+
+{-| Encode Canonical S-expressions as `String`s.
+
+@docs Encoder
+
+
+# Emitting strings
+
+@docs encodeString
+
+
+# Assembling encoders
+
+@docs s, list
+
+-}
 
 -- Copyright (C) 2019 CommonMind LLC
 --
@@ -20,10 +40,15 @@ import Bytes.Decode as D
 import Bytes.Encode as E
 
 
+{-| An Encoder is a partially assembled s-expression. Build these with
+`s` and `list, and convert them to strings with`encodeString\`.
+-}
 type Encoder
     = Encoder E.Encoder
 
 
+{-| Convert an encoder to a string.
+-}
 encodeString : Encoder -> String
 encodeString e =
     let
@@ -48,6 +73,8 @@ encodeBytes (Encoder e) =
     E.encode e
 
 
+{-| Encode a string as an atom.
+-}
 s : String -> Encoder
 s str =
     Encoder <|
@@ -58,6 +85,8 @@ s str =
             ]
 
 
+{-| Encode a list.
+-}
 list : List Encoder -> Encoder
 list items =
     Encoder <|
