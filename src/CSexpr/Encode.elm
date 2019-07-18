@@ -41,7 +41,7 @@ import Bytes.Encode as E
 
 
 {-| An Encoder is a partially assembled s-expression. Build these with
-`s` and `list, and convert them to strings with`encodeString\`.
+`s` and `list`, and convert them to strings with`encodeString`.
 -}
 type Encoder
     = Encoder E.Encoder
