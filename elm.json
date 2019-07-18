@@ -3,7 +3,7 @@
     "name": "commonmind/elm-csexpr",
     "summary": "Encode Canonical S-Expressions",
     "license": "AGPL-3.0",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "exposed-modules": [
         "CSexpr",
         "CSexpr.Decode",
