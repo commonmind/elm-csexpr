@@ -16,16 +16,20 @@ Elm's `Dict` type and other applications where values are compared by
 looking at the raw bytes (including many cryptographic applications,
 which is what they were designed for).
 
-See the Wikipedia article linked above for general information about
-canonical s-expressions.
+Canonical S-expressions are simpler than JSON; they only have two types:
 
-Note that while canonical s-expressions can encode binary data, this
-package does not support that -- atoms must be strings. The reason for
-this is that elm's `Bytes` type cannot be used as a `Dict` key, so
-encoding to `Bytes` would defeat the point of the package.
+* lists
+* "atoms"
 
-So far this package only provides encoding of s-expressions; parsing
-is still TODO.
+Atoms are just flat bytes, while lists are lists of other s-expressions.
+Note that while according to the standard, canonical s-expressions can
+encode binary data, this package does not support that -- atoms must be
+strings. The reason for this is that elm's `Bytes` type cannot be used
+as a `Dict` key, so encoding to `Bytes` would defeat the point of the
+package.
+
+See the Wikipedia article linked above for more general information
+about canonical s-expressions.
 
 # License
 
