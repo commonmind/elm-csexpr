@@ -1,7 +1,7 @@
 module CSexpr.Encode exposing
     ( Encoder
     , encodeString
-    , s, list
+    , s, list, csexpr
     )
 
 {-| Encode Canonical S-expressions as `String`s.
@@ -16,7 +16,7 @@ module CSexpr.Encode exposing
 
 # Assembling encoders
 
-@docs s, list
+@docs s, list, csexpr
 
 -}
 
@@ -38,10 +38,11 @@ module CSexpr.Encode exposing
 import Bytes exposing (Bytes)
 import Bytes.Decode as D
 import Bytes.Encode as E
+import CSexpr exposing (CSexpr(..))
 
 
 {-| An Encoder is a partially assembled s-expression. Build these with
-`s` and `list`, and convert them to strings with`encodeString`.
+`s`, `list`, and `csexpr`, and convert them to strings with`encodeString`.
 -}
 type Encoder
     = Encoder E.Encoder
@@ -95,3 +96,15 @@ list items =
             , E.sequence <| List.map (\(Encoder e) -> e) items
             , E.string ")"
             ]
+
+
+{-| Encode an s-expression
+-}
+csexpr : CSexpr -> Encoder
+csexpr sexpr =
+    case sexpr of
+        Atom str ->
+            s str
+
+        List l ->
+            list (List.map csexpr l)
